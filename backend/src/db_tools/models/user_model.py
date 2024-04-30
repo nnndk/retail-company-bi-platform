@@ -9,15 +9,13 @@ class User(Base, BaseModel):
     __tablename__ = "user"
 
     username = Column(String, unique=True, index=True)
-    email = Column(String, nullable=True)
     hashed_password = Column(String)
     is_verified = Column(Boolean, default=False)
 
-    def __init__(self, username: str, hashed_password: str, email: str, created_date: dt.datetime,
+    def __init__(self, username: str, hashed_password: str, created_date: dt.datetime,
                  last_modified_date: dt.datetime):
         self.username = username
         self.hashed_password = hashed_password
-        self.email = email
         self.created_date = created_date
         self.last_modified_date = last_modified_date
 

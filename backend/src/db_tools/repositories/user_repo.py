@@ -23,17 +23,15 @@ class UserRepository:
             return user
 
     def get_by_username(self, username: str) -> Type[User]:
-        print(username)
         with self.session_factory() as session:
             user = session.query(User).filter(User.username == username, User.is_deleted == False).first()
 
             return user
 
-    def add(self, username: str, hashed_password: str, email: str) -> User:
+    def add(self, username: str, hashed_password: str) -> User:
         with self.session_factory() as session:
             user = User(username=username,
                         hashed_password=hashed_password,
-                        email=email,
                         created_date=dt.datetime.now(),
                         last_modified_date=dt.datetime.now())
 

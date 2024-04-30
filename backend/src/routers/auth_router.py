@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt
 
 from db_tools.services.user_service import UserService
-from src.pydantic_models.user_model import User, UserInDB
+from src.pydantic_models.user_model import User, UserInDB, UserCreds
 from src.common_tools.password_tool import PasswordTool
 from db_tools.database import database
 
@@ -39,17 +39,17 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-@AuthRouter.post('/signup', status_code=status.HTTP_201_CREATED)
-async def signup(user: User):
+@AuthRouter.post('/create_user', status_code=status.HTTP_201_CREATED)
+async def create_user(user_data: UserCreds):
     user_service: UserService = UserService(database.session)
-    hashed_password = PasswordTool.get_hash_password(user.password)
-    user_db = UserInDB(**user.dict(), hashed_password=hashed_password)
+    hashed_password = PasswordTool.get_hash_password(user_data.password)
+    user_db = UserInDB(**user_data.dict(), hashed_password=hashed_password)
 
-    return user_service.create_user(user_db.username, user_db.hashed_password, user_db.email)
+    return user_service.create_user(user_db.username, user_db.hashed_password)
 
 
 @AuthRouter.post("/login")
-async def login(user_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+async def login(user_data: UserCreds):
     user_service: UserService = UserService(database.session)
     user = user_service.get_user_by_username(user_data.username)
 
@@ -61,7 +61,13 @@ async def login(user_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         data={"sub": user.username}, expires_delta=access_token_expires
     )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "userInfo": user}
+
+
+@AuthRouter.post('/signup', status_code=status.HTTP_200_OK)
+async def create_user(user_data: UserCreds):
+    await create_user(user_data)
+    return await login(user_data)
 
 
 @AuthRouter.get("/test/")
