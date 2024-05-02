@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { history, fetchWrapper } from '_helpers';
+import { history } from 'tools/history';
+import { fetchWrapper } from 'tools/fetch-wrapper';
 
 // create slice
-
 const name = 'auth';
 const initialState = createInitialState();
 const reducers = createReducers();
@@ -12,12 +12,10 @@ const extraReducers = createExtraReducers();
 const slice = createSlice({ name, initialState, reducers, extraReducers });
 
 // exports
-
 export const authActions = { ...slice.actions, ...extraActions };
 export const authReducer = slice.reducer;
 
 // implementation
-
 function createInitialState() {
     return {
         // initialize state from local storage to enable user to stay logged in

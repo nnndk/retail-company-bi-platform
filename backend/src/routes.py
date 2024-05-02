@@ -5,7 +5,8 @@ from routers.auth_router import AuthRouter
 
 
 def setup_routes(app: FastAPI) -> None:
-    """Setup API routes"""
-
+    """
+    Setup API routes
+    """
     app.include_router(AppRouter)
     app.include_router(AuthRouter)

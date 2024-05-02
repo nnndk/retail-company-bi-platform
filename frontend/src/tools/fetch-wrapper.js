@@ -1,4 +1,4 @@
-import { store, authActions } from '_store';
+import { store, authActions } from 'store';
 
 export const fetchWrapper = {
     get: request('GET'),
@@ -7,7 +7,7 @@ export const fetchWrapper = {
     delete: request('DELETE')
 };
 
-function request(method) {
+export const request = (method) => {
     return (url, body) => {
         const requestOptions = {
             method,
@@ -22,8 +22,7 @@ function request(method) {
 }
 
 // helper functions
-
-function authHeader(url) {
+export const authHeader = (url) => {
     // return auth header with jwt if user is logged in and request is to the api url
     const token = authToken();
     const isLoggedIn = !!token;
@@ -35,11 +34,11 @@ function authHeader(url) {
     }
 }
 
-function authToken() {
-    return store.getState().auth.user?.token;
+export const authToken = () => {
+    return store.getState().auth.user.access_token
 }
 
-function handleResponse(response) {
+export const handleResponse = (response) => {
     return response.text().then(text => {
         const data = text && JSON.parse(text);
 

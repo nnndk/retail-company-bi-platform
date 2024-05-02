@@ -5,12 +5,10 @@ import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
-import { history } from '_helpers';
-import { authActions } from '_store';
+import { history } from 'tools/history';
+import { authActions } from 'store';
 
-export { Login };
-
-function Login() {
+export const Auth = () => {
     const [isLogin, setIsLogin] = useState(true);
     const handleToggle = () => {
       setIsLogin((prev) => !prev);
@@ -39,10 +37,6 @@ function Login() {
     const { errors, isSubmitting } = formState;
 
     function onSubmit({ username, password }) {
-        /*if (isLogin === false) {
-            return dispatch(authActions.signup({ username, password }))
-        }*/
-
         return dispatch(authActions.login({ isLogin, username, password }));
     }
 

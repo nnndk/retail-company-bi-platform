@@ -1,10 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '_store';
 
-export { Nav };
+import { authActions } from 'store';
 
-function Nav() {
+export const Nav = () => {
     const authUser = useSelector(x => x.auth.user);
     const dispatch = useDispatch();
     const logout = () => dispatch(authActions.logout());

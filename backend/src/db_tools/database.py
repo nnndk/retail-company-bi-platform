@@ -1,13 +1,21 @@
 from contextlib import contextmanager, AbstractContextManager
-from typing import Callable
 from sqlalchemy import create_engine, orm
 from sqlalchemy.orm import Session
+from typing import Callable
+
 from db_tools import Base
 from settings import settings
 
 
 class Database:
+    """
+    An instance of this class allows to manage a database (set in constructor)
+    """
     def __init__(self, db_url: str) -> None:
+        """
+        Constructor
+        :param db_url: A database connection string
+        """
         self._engine = create_engine(db_url, echo=True)
         self._session_factory = orm.scoped_session(
             orm.sessionmaker(
@@ -18,10 +26,20 @@ class Database:
         )
 
     def create_database(self) -> None:
+        """
+        Initialize the database by creating all its tables.
+        All these tables are models in this project.
+        These models are inherited from db_tools.Base (in db_tools.__init__.py)
+        :return: None
+        """
         Base.metadata.create_all(self._engine)
 
     @contextmanager
     def session(self) -> Callable[..., AbstractContextManager[Session]]:
+        """
+        Create a new session of the database. It lets to interact with the database and its tables
+        :return: New session
+        """
         session: Session = self._session_factory()
         try:
             yield session
@@ -32,5 +50,6 @@ class Database:
             session.close()
 
 
+# create db interface instance and init database
 database = Database(settings.database_url)
 database.create_database()

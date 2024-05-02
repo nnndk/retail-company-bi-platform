@@ -1,7 +1,12 @@
-# react-18-redux-jwt-authentication-example
+# Frontend of Retail Company BI Platform
 
-React 18 + Redux - JWT Authentication Example & Tutorial
+## About this part
 
-Documentation at https://jasonwatmore.com/post/2022/06/15/react-18-redux-jwt-authentication-example-tutorial
+This is a frontend for Retail Company BI System. It is created with React and Redux
 
-Documentación en español en https://jasonwatmore.es/post/2022/06/15/react-18-redux-ejemplo-y-tutorial-de-autenticacion-jwt
+## How to run
+
+To run frontend, you should run in frontend-directory in Command Prompt the following commands (note that you need a node.js to run frontend):
+
+1. <i>npm install</i>
+2. <i>npm start</i>

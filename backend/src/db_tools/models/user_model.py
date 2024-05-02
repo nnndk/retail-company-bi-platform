@@ -1,11 +1,15 @@
 from sqlalchemy import Column, String, Boolean
+import datetime as dt
+
 from db_tools.models.base_model import BaseModel
 from db_tools import Base
-import datetime as dt
 
 
 # Define model
 class User(Base, BaseModel):
+    """
+    Model of a user database table
+    """
     __tablename__ = "user"
 
     username = Column(String, unique=True, index=True)

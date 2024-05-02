@@ -1,0 +1,7 @@
+[APP]
+HOST=127.0.0.1
+PORT=8000
+DATABASE_URL=postgresql://postgres:secret@localhost/retail_company_bi_platform_db
+
+[AUTH]
+SECRET_KEY=very_secret_key
