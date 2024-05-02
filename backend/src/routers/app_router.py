@@ -13,7 +13,7 @@ UPLOAD_DIR = 'temp_storage'
 
 
 @AppRouter.post('/upload_excel/')
-async def upload_excel(token: Annotated[str, Depends(routers.oauth2_scheme)], file: UploadFile = File(...)):
+async def upload_excel(token: Annotated[str, Depends(routers.oauth2_scheme)], file: UploadFile = File(...)) -> None:
     """
     Upload a file to the server
     :param token: Access token for authorization

@@ -16,7 +16,7 @@ AuthRouter = APIRouter(
 
 
 @AuthRouter.post('/create_user', status_code=status.HTTP_201_CREATED)
-async def create_user(user_data: User):
+async def create_user(user_data: User) -> User:
     """
     Create new user
     :param user_data: User data (username, password, etc)
@@ -31,7 +31,7 @@ async def create_user(user_data: User):
 
 
 @AuthRouter.post('/login')
-async def login(user_data: User):
+async def login(user_data: User) -> dict:
     """
     Login
     :param user_data: User data (username, password, etc)
@@ -54,7 +54,7 @@ async def login(user_data: User):
 
 
 @AuthRouter.post('/signup', status_code=status.HTTP_200_OK)
-async def signup(user_data: User):
+async def signup(user_data: User) -> dict:
     """
     Signup == create user & login
     :param user_data: User data (username, password, etc)
