@@ -1,12 +1,5 @@
 import { store, authActions } from 'store';
 
-export const fetchWrapper = {
-    get: request('GET'),
-    post: request('POST'),
-    put: request('PUT'),
-    delete: request('DELETE')
-};
-
 export const request = (method) => {
     return (url, body) => {
         const requestOptions = {
@@ -20,6 +13,13 @@ export const request = (method) => {
         return fetch(url, requestOptions).then(handleResponse);
     }
 }
+
+export const fetchWrapper = {
+    get: request('GET'),
+    post: request('POST'),
+    put: request('PUT'),
+    delete: request('DELETE')
+};
 
 // helper functions
 export const authHeader = (url) => {
@@ -35,7 +35,8 @@ export const authHeader = (url) => {
 }
 
 export const authToken = () => {
-    return store.getState().auth.user.access_token
+    console.log(store.getState())
+    return store.getState().auth.user?.access_token
 }
 
 export const handleResponse = (response) => {

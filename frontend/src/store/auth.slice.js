@@ -12,10 +12,12 @@ const extraReducers = createExtraReducers();
 const slice = createSlice({ name, initialState, reducers, extraReducers });
 
 // exports
+
 export const authActions = { ...slice.actions, ...extraActions };
 export const authReducer = slice.reducer;
 
 // implementation
+
 function createInitialState() {
     return {
         // initialize state from local storage to enable user to stay logged in
@@ -40,23 +42,11 @@ function createExtraActions() {
     const baseUrl = `${process.env.REACT_APP_API_URL}/auth`;
 
     return {
-        login: login(),
-        signup: signup()
-    };    
-
-    function login() {
-        return createAsyncThunk(
+        login: createAsyncThunk(
             `${name}/login`,
             async ({ isLogin, username, password }) => await fetchWrapper.post(`${baseUrl}/${isLogin ? 'login' : 'signup'}`, { username, password })
-        );
-    }
-
-    function signup() {
-        return createAsyncThunk(
-            `${name}/signup`,
-            async ({ username, password }) => await fetchWrapper.post(`${baseUrl}/signup`, { username, password })
-        );
-    }
+        )
+    };
 }
 
 function createExtraReducers() {

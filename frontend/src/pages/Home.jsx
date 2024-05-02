@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { fetchWrapper } from 'tools/fetch-wrapper';
+import { fetchWrapper, authHeader } from 'tools/fetch-wrapper';
 
 export const Home = () => {
     const { user: authUser } = useSelector(x => x.auth);
@@ -22,8 +22,12 @@ export const Home = () => {
         formData.append('file', file);
 
         try {
-            const url = `${process.env.REACT_APP_API_URL}/upload_excel`;
-            const response = await fetchWrapper.post(url)
+            const url = `${process.env.REACT_APP_API_URL}/upload_excel/`;
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: authHeader(url)
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to upload Excel file');

@@ -35,7 +35,7 @@ async def login(user_data: User):
     """
     Login
     :param user_data: User data (username, password, etc)
-    :return: Dict (json) {'access_token': token, 'token_type': 'token type', 'userInfo': user (instance of User)}
+    :return: Dict (json) {'access_token': token, 'token_type': 'token type', 'user_info': user (instance of User)}
     """
     # TODO: add (check) error raising and handling (existing user etc)
     user_service: UserService = UserService(database.session)
@@ -49,11 +49,12 @@ async def login(user_data: User):
         data={'username': user.username}, expires_delta=access_token_expires
     )
 
-    return {'access_token': access_token, 'token_type': 'bearer', 'user_info': user}
+    return {'access_token': access_token, 'token_type': 'bearer', 'user_info': {'id': user.id,
+                                                                                'username': user.username}}
 
 
 @AuthRouter.post('/signup', status_code=status.HTTP_200_OK)
-async def create_user(user_data: User):
+async def signup(user_data: User):
     """
     Signup == create user & login
     :param user_data: User data (username, password, etc)

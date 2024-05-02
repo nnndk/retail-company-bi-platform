@@ -25,7 +25,7 @@ export const App = () => {
                             </PrivateRoute>
                         }
                     />
-                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/login" element={<Auth />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </div>

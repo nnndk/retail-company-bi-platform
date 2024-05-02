@@ -20,9 +20,8 @@ export const Auth = () => {
 
     useEffect(() => {
         // redirect to home if already logged in
+        console.log(authUser)
         if (authUser) history.navigate('/');
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // form validation rules 
@@ -62,7 +61,7 @@ export const Auth = () => {
 
                         <div className="mt-3 text-center">
                             <p>
-                                {isLogin ? "Don't" : "Already"} have an account ?{" "}
+                                {isLogin ? "Don't" : "Already"} have an account?{" "}
                                 <Button
                                 size="sm"
                                 variant="outline-primary"
