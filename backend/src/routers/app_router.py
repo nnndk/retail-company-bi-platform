@@ -17,7 +17,7 @@ async def upload_excel(token: Annotated[str, Depends(routers.oauth2_scheme)], fi
     """
     Upload a file to the server
     :param token: Access token for authorization
-    :file: A file
+    :param file: A file
     :return: None
     """
     credentials_exception = HTTPException(status_code=401, detail='Could not validate credentials')

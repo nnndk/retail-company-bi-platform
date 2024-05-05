@@ -1,16 +1,16 @@
 from sqlalchemy import Column, String, Boolean
 import datetime as dt
 
-from db_tools.models.base_model import BaseModel
+from db_tools.models.base_model import BaseModelDeleteFlag
 from db_tools import Base
 
 
 # Define model
-class User(Base, BaseModel):
+class User(Base, BaseModelDeleteFlag):
     """
     Model of a user database table
     """
-    __tablename__ = "user"
+    __tablename__ = 'user'
 
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
@@ -22,4 +22,3 @@ class User(Base, BaseModel):
         self.hashed_password = hashed_password
         self.created_date = created_date
         self.last_modified_date = last_modified_date
-

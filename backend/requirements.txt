@@ -14,3 +14,9 @@ SQLAlchemy>=2.0.29,<2.1
 psycopg2>=2.9.9,<2.10.0
 # access tokens for auth
 python-jose>=3.3.0,<3.4.0
+# для конвертирования эксель-файла в таблицы бд
+pandas>=2.2.2, <2.3.0
+# работа с excel
+openpyxl>=3.1.2,<3.2.0
+# транслит с русского в английский
+transliterate~=1.10.2
