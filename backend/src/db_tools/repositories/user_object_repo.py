@@ -74,14 +74,15 @@ class UserObjectRepository:
         :return: If rows are deleted successfully, returns True
         """
         with self.session_factory() as session:
-            user_objects = session.query(UserObject).filter(UserObject.owner_username == owner_username)
+            user_objects = session.query(UserObject).filter(UserObject.owner_username == owner_username).all()
 
-            if user_objects is None:
+            if not user_objects:
                 return False
 
-            session.delete(user_objects)
-            session.commit()
+            for user_object in user_objects:
+                session.delete(user_object)
 
+            session.commit()
             return True
 
     def delete_by_table_name(self, table_name: str) -> bool:

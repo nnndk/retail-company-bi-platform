@@ -56,6 +56,15 @@ class Database:
         if table_name in metadata.tables:
             metadata.tables[table_name].drop(self._engine)
 
+    def drop_table_starts_with(self, start_text: str):
+        metadata = MetaData()
+        metadata.reflect(bind=self._engine)
+
+        tables_to_drop = [table for table in metadata.tables if table.startswith(start_text)]
+
+        for table in tables_to_drop:
+            metadata.tables[table].drop(self._engine)
+
 
 # create db interface instance and init database
 database = Database(settings.database_url)

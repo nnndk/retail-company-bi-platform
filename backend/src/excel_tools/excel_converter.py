@@ -10,6 +10,7 @@ import time
 from db_tools import Base
 from pydantic_models.user_model import User
 from db_tools.database import database
+from db_tools.services.user_object_service import UserObjectService
 
 
 class ExcelConverter:
@@ -41,6 +42,7 @@ class ExcelConverter:
         self.date_column_id: int = -1
         self.dimension_data: dict[str, dict[str, int]] = {}
         self.main_dim_cols: dict[str, int] = {}
+        self.user_object_service = UserObjectService(session_factory)
 
         # Load Excel data into DataFrame
         xl = pd.ExcelFile(self.filename)
@@ -69,7 +71,7 @@ class ExcelConverter:
                 latin_fact_col_name = translit(header, 'ru', reversed=True).capitalize()
                 self.fact_columns.append([header, latin_fact_col_name, col_idx])
                 continue
-            elif low_header.startswith(ExcelConverter.DEFAULT_DATA_COLUMN_START) and self.date_column is None:
+            elif low_header.startswith(ExcelConverter.DEFAULT_DATA_COLUMN_START) and self.date_column == '':
                 self.date_column = header
                 self.date_column_id = col_idx
                 continue
@@ -95,6 +97,8 @@ class ExcelConverter:
         """
         Generate dimension and fact tables.
         """
+        database.drop_table_starts_with(f'{self.user.username}_')
+        self.user_object_service.delete_all_objects_row_by_owner_username(self.user.username)
         self._generate_dim_tables()
         self._generate_fact_table()
 
@@ -121,6 +125,8 @@ class ExcelConverter:
                 })
 
                 Base.metadata.create_all(session.bind)
+                self.user_object_service.add_user_object_row(self.user.username, db_table_name)
+
                 self.dimension_data[latin_table_name] = {}
                 row_id = -1
 
@@ -175,6 +181,7 @@ class ExcelConverter:
             })
 
             Base.metadata.create_all(session.bind)
+            self.user_object_service.add_user_object_row(self.user.username, db_fact_table_name)
             dimension_data_ids = {}
 
             for k in self.dimension_data.keys():
@@ -197,7 +204,7 @@ class ExcelConverter:
 
             session.commit()
             end_time = time.time()
-            print(f'Process time: {end_time - start_time}')
+            print(f'_generate_fact_table process time: {end_time - start_time}')
 
     @staticmethod
     def _infer_column_type(data) -> type:

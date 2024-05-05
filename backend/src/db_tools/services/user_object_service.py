@@ -6,7 +6,7 @@ from db_tools.models.user_object_model import UserObject
 from db_tools.repositories.user_object_repo import UserObjectRepository
 
 
-class UserService:
+class UserObjectService:
     """
     An instance of this class provides an interface to manage data of the database table 'user_object'
     """
