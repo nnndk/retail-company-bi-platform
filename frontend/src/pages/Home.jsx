@@ -1,15 +1,6 @@
-import { useSelector } from 'react-redux';
-
-import { fetchWrapper, authHeader } from 'tools/fetch-wrapper';
+import { authHeader } from 'tools/fetch-wrapper';
 
 export const Home = () => {
-    const { user: authUser } = useSelector(x => x.auth);
-
-    async function testPrivateApi() {
-        const baseUrl = `${process.env.REACT_APP_API_URL}/auth`;
-        console.log(await fetchWrapper.get(`${baseUrl}/test`))
-    }
-
     async function sendExcel() {
         const fileInput = document.getElementById('fileInput');
         if (fileInput.files.length === 0) {
@@ -18,8 +9,12 @@ export const Home = () => {
         }
 
         const file = fileInput.files[0];
+        const factColumnNamesInput = document.getElementById('factColumnNames');
+        const factColumnNames = factColumnNamesInput.value.split(',').map(col => col.trim());
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('fact_column_names', factColumnNames);
+        console.log(factColumnNames)
 
         try {
             const url = `${process.env.REACT_APP_API_URL}/upload_excel/`;
@@ -41,10 +36,16 @@ export const Home = () => {
 
     return (
         <div>
-            <h1>Hi {authUser?.user_info.username}!</h1>
-            <button onClick={testPrivateApi}>Test private api</button>
-            <input type="file" id="fileInput" />
-            <button onClick={sendExcel}>Send excel</button>
+            <h1 className='mb-3'>Analyze your data</h1>
+            <h5 className='mb-5'>Upload your data in .xlsx format to analyze it</h5>
+            <span>Upload Excel file with your data:</span>
+            <input className='mb-2 mt-1' type="file" id="fileInput" />
+            <br />
+            <span>Write fact column names:</span>
+            <br />
+            <input className='mb-3 mt-1' type="text" id="factColumnNames" placeholder="Enter fact column names separated by commas" size={50}/>
+            <br />
+            <button className='mb-3 mt-3' onClick={sendExcel}>Send excel</button>
         </div>
     );
 }
