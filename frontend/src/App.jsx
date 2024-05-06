@@ -15,7 +15,7 @@ export const App = () => {
     return (
         <div className="app-container bg-light">
             <Nav />
-            <div className="container pt-4 pb-4">
+            <div className="pt-4 pb-4 px-4">
                 <Routes>
                 <Route
                         path="/"

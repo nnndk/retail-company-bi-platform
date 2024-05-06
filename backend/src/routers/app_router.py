@@ -1,6 +1,11 @@
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
+from fastapi.responses import HTMLResponse
 from typing import Annotated
 import os
+import matplotlib.pyplot as plt
+import numpy as np
+import io
+import base64
 
 from fastapi.params import Body
 
@@ -17,10 +22,10 @@ AppRouter = APIRouter(
 UPLOAD_DIR = 'temp_storage'
 
 
-@AppRouter.post('/upload_excel/')
+@AppRouter.post('/upload_excel/', response_class=HTMLResponse)
 async def upload_excel(token: Annotated[str, Depends(routers.oauth2_scheme)],
                        file: UploadFile = File(...),
-                       fact_column_names: list[str] = Body(...)) -> None:
+                       fact_column_names: list[str] = Body(...)) -> str:
     """
     Upload a file to the server
     :param token: Access token for authorization
@@ -50,4 +55,6 @@ async def upload_excel(token: Annotated[str, Depends(routers.oauth2_scheme)],
         f.write(await file.read())
 
     converter = ExcelConverter(file_path, fact_columns, user, database.session)
-    converter.generate_cube()
+    graphs = converter.create_graphs()
+
+    return graphs

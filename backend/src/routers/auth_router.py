@@ -63,14 +63,3 @@ async def signup(user_data: User) -> dict:
     # TODO: add error raising and handling (existing user etc)
     await create_user(user_data)
     return await login(user_data)
-
-
-@AuthRouter.get('/test/')
-async def read_items(token: Annotated[str, Depends(routers.oauth2_scheme)]):
-    """
-    Login
-    :param token: Access token for authorization
-    :return: Dict (json) {'token': token}
-    """
-    # TODO: delete later
-    return {'token': token}

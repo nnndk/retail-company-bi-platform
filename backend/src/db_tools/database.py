@@ -1,5 +1,5 @@
 from contextlib import contextmanager, AbstractContextManager
-from sqlalchemy import create_engine, orm, MetaData, Table
+from sqlalchemy import create_engine, orm, MetaData, text
 from sqlalchemy.orm import Session
 from typing import Callable
 
@@ -64,6 +64,16 @@ class Database:
 
         for table in tables_to_drop:
             metadata.tables[table].drop(self._engine)
+
+            if table in Base.metadata.tables:
+                Base.metadata.remove(Base.metadata.tables[table])
+
+    def execute_select_sql_query(self, query):
+        with self._engine.connect() as connection:
+            result = connection.execute(text(query))
+            rows = result.fetchall()
+
+        return rows
 
 
 # create db interface instance and init database
