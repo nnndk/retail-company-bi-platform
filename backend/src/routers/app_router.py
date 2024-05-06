@@ -2,10 +2,6 @@ from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from typing import Annotated
 import os
-import matplotlib.pyplot as plt
-import numpy as np
-import io
-import base64
 
 from fastapi.params import Body
 

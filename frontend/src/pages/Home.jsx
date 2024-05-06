@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { authHeader } from 'tools/fetch-wrapper';
 
 export const Home = () => {
+    const [dataFile, setDataFile] = useState(null);
     const [imageSrc, setImageSrc] = useState('');
+
+    async function handleFileChange(event) {
+        const file = event.target.files[0];
+        setDataFile(file);
+    }
 
     async function sendExcel() {
         const fileInput = document.getElementById('fileInput');
@@ -49,7 +55,7 @@ export const Home = () => {
                     <h5 className='mb-5'>Upload your data in .xlsx format to analyze it</h5>
                     <span>Upload Excel file with your data:</span>
                     <br />
-                    <input className='mb-3 mt-1' type="file" id="fileInput" />
+                    <input className='mb-3 mt-1' type="file" id="fileInput" onChange={handleFileChange} />
                     <br />
                     <span>Write fact column names:</span>
                     <br />
