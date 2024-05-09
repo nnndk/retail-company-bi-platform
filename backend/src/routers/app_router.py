@@ -51,6 +51,7 @@ async def upload_excel(token: Annotated[str, Depends(routers.oauth2_scheme)],
         f.write(await file.read())
 
     converter = ExcelConverter(file_path, fact_columns, user, database.session)
+    converter.generate_cube()
     graphs = converter.create_graphs()
 
     return graphs

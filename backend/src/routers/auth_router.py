@@ -1,5 +1,4 @@
-from fastapi import APIRouter, status, HTTPException, Depends
-from typing import Annotated
+from fastapi import APIRouter, status, HTTPException
 from datetime import timedelta
 
 from db_tools.services.user_service import UserService
