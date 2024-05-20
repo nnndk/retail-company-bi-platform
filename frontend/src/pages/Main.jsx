@@ -38,8 +38,11 @@ export const Main = ({ language }) => {
             if (!response.ok) {
                 throw new Error('Failed to upload Excel file');
             }
+
+            alert(text_resources["sentDataSuccessfully"][language]);
         } catch (error) {
             console.error('Error uploading Excel file:', error);
+            alert(text_resources["sendingDataFailed"][language]);
         }
     }
 

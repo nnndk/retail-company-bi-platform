@@ -92,8 +92,8 @@
         "RU": "Добавить круговую диаграмму"
     },
     "downloadPDF": {
-        "EN": "Download PDF",
-        "RU": "Скачать PDF"
+        "EN": "Export PDF",
+        "RU": "Экспортировать PDF"
     },
     "all": {
         "EN": "All",
@@ -102,5 +102,21 @@
     "allPeriod": {
         "EN": "All Period",
         "RU": "Весь период"
+    },
+    "gotDataSuccessfully": {
+        "EN": "Cube is loaded successfully!",
+        "RU": "Куб успешно получен!"
+    },
+    "receivingDataFailed": {
+        "EN": "Error receiving cube!",
+        "RU": "Ошибка при получении куба!"
+    },
+    "sentDataSuccessfully": {
+        "EN": "Data is sending successfully!",
+        "RU": "Данные успешно отправлены!"
+    },
+    "sendingDataFailed": {
+        "EN": "Error sending data!",
+        "RU": "Ошибка при отправке данных!"
     }
 }

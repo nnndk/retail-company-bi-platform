@@ -131,12 +131,12 @@ export const AnalyticalSection = ({ language }) => {
             }
 
             setCubeData(cubeData);
-            alert('Cube is loaded successfully!');
+            alert(text_resources["gotDataSuccessfully"][language]);
 
             console.log('Cube Info:', cubeInfo);
             console.log('Cube Data:', cubeData);
         } catch (error) {
-            alert('Error receiving cube info or data!');
+            alert(text_resources["receivingDataFailed"][language]);
             console.error('Error receiving cube info or data:', error);
         }
     }
@@ -163,7 +163,14 @@ export const AnalyticalSection = ({ language }) => {
                                 onChange={(newTitle) => handleTitleChange(index, 'line', newTitle)}
                             />
                             <DataLineChart language={language} periodGroup={periodGroup} cubeInfo={cubeInfo} cubeData={cubeData} />
-                            {showButtons && <button className='btn btn-danger mt-2' onClick={() => handleRemoveLineChart(index)} style={{ position: 'absolute', right: 0, top: 0 }}>{text_resources["delete"][language]}</button>}
+                            {showButtons && 
+                                <button 
+                                    className='btn btn-danger mt-2' 
+                                    onClick={() => handleRemoveLineChart(index)} 
+                                    style={{ position: 'absolute', right: 0, top: 0 }}>
+                                        {text_resources["delete"][language]}
+                                </button>
+                            }
                             <hr />
                         </div>
                     ))}
@@ -178,7 +185,14 @@ export const AnalyticalSection = ({ language }) => {
                                 onChange={(newTitle) => handleTitleChange(index, 'pie', newTitle)}
                             />
                             <DataPieChart language={language} periodGroup={periodGroup} cubeInfo={cubeInfo} cubeData={cubeData} />
-                            {showButtons && <button className='btn btn-danger mt-2' onClick={() => handleRemovePieChart(index)} style={{ position: 'absolute', right: 0, top: 0 }}>{text_resources["delete"][language]}</button>}
+                            {showButtons && 
+                                <button 
+                                    className='btn btn-danger mt-2' 
+                                    onClick={() => handleRemovePieChart(index)} 
+                                    style={{ position: 'absolute', right: 0, top: 0 }}>
+                                        {text_resources["delete"][language]}
+                                </button>
+                            }
                             <hr />
                         </div>
                     ))}
