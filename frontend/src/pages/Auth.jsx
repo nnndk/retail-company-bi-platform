@@ -7,8 +7,10 @@ import { Button, Card, Col, Form, Row } from "react-bootstrap";
 
 import { history } from 'tools/history';
 import { authActions } from 'store';
+import { text_resources } from '../resources'
 
-export const Auth = () => {
+
+export const Auth = ({ language }) => {
     const [isLogin, setIsLogin] = useState(true);
     const handleToggle = () => {
       setIsLogin((prev) => !prev);
@@ -41,17 +43,17 @@ export const Auth = () => {
 
     return (
         <Row className="justify-content-center">
-            <Col xs={10} md={4}>
+            <Col xs={12} sm={10} md={8} lg={6} xl={4}>
                 <Card className="my-5 px-5 py-3">
-                    <h1 className="m-3 text-center">{isLogin ? "Log In" : "Sign Up"}</h1>
+                    <h1 className="m-3 text-center">{isLogin ? text_resources["loginTitle"][language] : text_resources["signupTitle"][language]}</h1>
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Form.Group className="my-2">
-                            <Form.Label>Username</Form.Label>
+                            <Form.Label>{text_resources["username"][language]}</Form.Label>
                             <Form.Control name="username" type="text" {...register('username')} />
                             <div className="invalid-feedback">{errors.username?.message}</div>
                         </Form.Group>
                         <Form.Group className="my-2">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label>{text_resources["password"][language]}</Form.Label>
                             <Form.Control name="password" type="password" {...register('password')} />
                             <div className="invalid-feedback">{errors.password?.message}</div>
                         </Form.Group>
@@ -61,17 +63,19 @@ export const Auth = () => {
 
                         <div className="mt-3 text-center">
                             <p>
-                                {isLogin ? "Don't" : "Already"} have an account?{" "}
+                                {isLogin ? text_resources["dontHaveAccount"][language] : text_resources["alreadyHaveAccount"][language]} {" "}
+                                <br />
                                 <Button
                                 size="sm"
                                 variant="outline-primary"
+                                className="mt-2"
                                 onClick={handleToggle}
                                 >
-                                {isLogin ? "Sign Up" : "Log In"}
+                                {isLogin ? text_resources["signup"][language] : text_resources["login"][language]}
                                 </Button>
                             </p>
                             <Button className="btn btn-block" type="submit" disabled={isSubmitting}>
-                                {isLogin ? "Log In" : "Sign Up"}
+                                {isLogin ? text_resources["login"][language] : text_resources["signup"][language]}
                             </Button>
                         </div>
                     </Form>

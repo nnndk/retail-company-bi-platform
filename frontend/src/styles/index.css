@@ -1,0 +1,18 @@
+.custom-select-dark {
+    background-color: #343a40; /* Dark background */
+    color: white;              /* White text */
+    border: 1px solid #495057; /* Dark border */
+    padding: .375rem 1.75rem .375rem .75rem; /* Match Bootstrap's padding */
+    border-radius: .25rem;     /* Match Bootstrap's border radius */
+}
+
+.custom-select-dark:focus {
+    border-color: #495057;
+    box-shadow: 0 0 0 .2rem rgba(130, 138, 145, .25); /* Darker focus shadow */
+}
+
+.hr-bright {
+    border: 0;
+    border-top: 1px solid; /* более яркий цвет */
+    margin: 20px 0;
+}

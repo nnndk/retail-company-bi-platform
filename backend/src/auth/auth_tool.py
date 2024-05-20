@@ -24,7 +24,7 @@ class AuthTool:
         if expires_delta:
             expire = datetime.now(timezone.utc) + expires_delta
         else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+            expire = datetime.now(timezone.utc) + timedelta(minutes=120)
 
         to_encode.update({'exp': expire})
         encoded_jwt = jwt.encode(to_encode, AuthTool._SECRET_KEY, algorithm=AuthTool._ALGORITHM)

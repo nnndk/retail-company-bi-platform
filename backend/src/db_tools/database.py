@@ -68,12 +68,46 @@ class Database:
             if table in Base.metadata.tables:
                 Base.metadata.remove(Base.metadata.tables[table])
 
-    def execute_select_sql_query(self, query):
+    def drop_views_starts_with(self, start_text: str):
+        """
+        Drop all views that start with a given prefix.
+        :param start_text: The prefix of the view names to be dropped.
+        """
+        with self.session() as session:
+            result = session.execute(
+                text('SELECT table_name FROM information_schema.views WHERE table_name LIKE :prefix'),
+                {'prefix': f'{start_text}%'}
+            )
+            views_to_drop = [row[0] for row in result]
+
+            for view in views_to_drop:
+                session.execute(text(f'DROP VIEW IF EXISTS {view} CASCADE'))
+
+            session.commit()
+
+    def execute_select_sql_query(self, query: str):
         with self._engine.connect() as connection:
             result = connection.execute(text(query))
             rows = result.fetchall()
 
         return rows
+
+    def get_cube_name_start_with(self, start_text: str) -> str:
+        """
+        Get db view name (first one) that starts with a given prefix.
+        :param start_text: The prefix of the view names to be dropped.
+        """
+        with self.session() as session:
+            result = session.execute(
+                text('SELECT table_name FROM information_schema.views WHERE table_name LIKE :prefix'),
+                {'prefix': f'{start_text}%'}
+            )
+            views = [row[0] for row in result]
+
+            for view in views:
+                return view
+
+        return ''
 
 
 # create db interface instance and init database

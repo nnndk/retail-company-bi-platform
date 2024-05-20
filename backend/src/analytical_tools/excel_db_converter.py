@@ -1,56 +1,33 @@
 import pandas as pd
-from sqlalchemy import Column, Integer, String, DateTime, inspect
+from sqlalchemy import Column, Integer, String, DateTime, inspect, text
 from transliterate import translit
 from abc import ABC, abstractmethod
 from typing import Type, Callable
 from contextlib import AbstractContextManager
 from sqlalchemy.orm import Session
 import time
-import matplotlib.pyplot as plt
-import numpy as np
-import io
-import base64
 
 from db_tools import Base
 from pydantic_models.user_model import User
 from db_tools.database import database
 from db_tools.services.user_object_service import UserObjectService
+from analytical_tools import custom_translit
 
 
-class ExcelConverterABC(ABC):
+class ExcelDbConverterABC(ABC):
     """
     An abstract class for converting Excel data into database tables.
     """
 
     @abstractmethod
-    def __init__(self, filename: str, fact_cols: list[str], user: Type[User],
-                 session_factory: Callable[..., AbstractContextManager[Session]]) -> None:
-        """
-        Constructor for the abstract ExcelConverter class.
-
-        :param filename: Path to the Excel file.
-        :param fact_cols: List of column names containing fact data.
-        :param user: User object representing the owner of the data.
-        :param session_factory: Factory function to create a session.
-        """
-        pass
-
-    @abstractmethod
-    def generate_cube(self) -> list[dict]:
+    def convert(self):
         """
         Generate dimension and fact tables.
         """
         pass
 
-    @abstractmethod
-    def create_graphs(self):
-        """
-        Create graphs based on group queries.
-        """
-        pass
 
-
-class ExcelConverter(ExcelConverterABC):
+class ExcelDbConverter(ExcelDbConverterABC):
     """
     A class to convert Excel data into database tables.
     """
@@ -113,18 +90,18 @@ class ExcelConverter(ExcelConverterABC):
                 latin_fact_col_name = translit(header, 'ru', reversed=True).capitalize()
                 self.fact_columns.append([header, latin_fact_col_name, col_idx])
                 continue
-            elif low_header.startswith(ExcelConverter.DEFAULT_DATA_COLUMN_START) and self.date_column == '':
+            elif low_header.startswith(ExcelDbConverter.DEFAULT_DATA_COLUMN_START) and self.date_column == '':
                 self.date_column = header
                 self.date_column_id = col_idx
                 continue
-            elif low_header in ExcelConverter.EXCLUDED_COLUMNS:
+            elif low_header in ExcelDbConverter.EXCLUDED_COLUMNS:
                 continue
             else:
                 table_name = header
-                column_name = ExcelConverter.DEFAULT_DIM_COLUMN_VALUE
+                column_name = ExcelDbConverter.DEFAULT_DIM_COLUMN_VALUE
 
             column_type = self._infer_column_type(self.df.iloc[1:, col_idx - 1])
-            latin_table_name = ExcelConverter._translit(table_name)
+            latin_table_name = custom_translit(table_name)
 
             if table_name in table_cols.keys():
                 table_cols[table_name][0].append(col_idx)
@@ -135,17 +112,16 @@ class ExcelConverter(ExcelConverterABC):
 
         self.dimension_tables = table_cols
 
-    def generate_cube(self) -> list[dict]:
+    def convert(self):
         """
         Generate dimension and fact tables.
         """
+        database.drop_views_starts_with(f'{self.user.username}_')
         database.drop_table_starts_with(f'{self.user.username}_')
         self.user_object_service.delete_all_objects_row_by_owner_username(self.user.username)
         self._generate_dim_tables()
         self._generate_fact_table()
-        self._init_olap_cube_query()
-
-        return self._get_olap_cube()
+        self._init_olap_cube_view()
 
     def _generate_dim_tables(self) -> None:
         """
@@ -185,7 +161,7 @@ class ExcelConverter(ExcelConverterABC):
                             values = {}
 
                             for i in range(len(col_indices)):
-                                latin_col_name = ExcelConverter._translit(column_names[i])
+                                latin_col_name = custom_translit(column_names[i])
                                 val = unique_df.iloc[row_idx, col_indices[i] - 1]
                                 values[latin_col_name] = val
 
@@ -256,7 +232,7 @@ class ExcelConverter(ExcelConverterABC):
             end_time = time.time()
             print(f'_generate_fact_table process time: {end_time - start_time}')
 
-    def _init_olap_cube_query(self):
+    def _init_olap_cube_view(self):
         """
         Initialize OLAP cube query.
         """
@@ -279,7 +255,7 @@ class ExcelConverter(ExcelConverterABC):
                     query += f' JOIN {dim_table_name} ON "{self.fact_table_name}"."{dim_name}" = {dim_table_name}.id'
 
                     for dim_col in dim_columns:
-                        if dim_col.name == ExcelConverter.DEFAULT_DIM_COLUMN_VALUE:
+                        if dim_col.name == ExcelDbConverter.DEFAULT_DIM_COLUMN_VALUE:
                             display_cols.append(f'{dim_table_name}."{dim_col.name}" AS "{dim_name.capitalize()}"')
                         elif dim_col.name.lower() != 'id':
                             if dim_col.name.lower() == self.main_dim_cols[dim_name][1].lower():
@@ -292,107 +268,10 @@ class ExcelConverter(ExcelConverterABC):
         base_query = f'SELECT {", ".join(display_cols)} FROM "{self.fact_table_name}"'
         self.olap_cube_query = base_query + query
 
-    def _get_olap_cube(self) -> list[dict]:
-        """
-        Get OLAP cube data.
-        """
-        rows = database.execute_select_sql_query(self.olap_cube_query)
-        result = []
-
-        for row in rows:
-            result.append(row._mapping)
-
-        return result
-
-    def _get_group_queries(self) -> dict[str: str]:
-        """
-        Get group queries for generating graphs.
-        """
-        queries = {}
-
-        for dim_name, dim_table_model in self.dim_table_models.items():
-            #display_cols = [f'"{self.latin_date_column}"']
-            #group_cols = [f'"{self.latin_date_column}"']
-            display_cols = []
-            group_cols = []
-
-            for fact in self.fact_columns:
-                display_cols.append(f'SUM("{fact[1]}")')
-                break  # only 1 fact is supported so far
-
-            dim_inspector = inspect(dim_table_model)
-            dim_columns = dim_inspector.columns
-
-            for dim_col in dim_columns:
-                if dim_col.name == ExcelConverter.DEFAULT_DIM_COLUMN_VALUE:
-                    display_cols.append(f'"{dim_name.capitalize()}"')
-                    group_cols.append(f'"{dim_name.capitalize()}"')
-                elif dim_col.name.lower() != 'id':
-                    if dim_col.name.lower() == self.main_dim_cols[dim_name][1].lower():
-                        display_cols.append(f'"{dim_name.capitalize()}"')
-                        group_cols.append(f'"{dim_name.capitalize()}"')
-
-            query = f'SELECT {", ".join(display_cols)} FROM ({self.olap_cube_query}) GROUP BY {", ".join(group_cols)}'
-            queries[dim_name] = query
-
-        return queries
-
-    def create_graphs(self):
-        """
-        Create graphs based on group queries.
-        """
-        queries = self._get_group_queries()
-
-        # Initialize an empty list to store the plots
-        plots, i = [], 0
-        fig, axes = plt.subplots(nrows=len(queries), figsize=(10, 10))
-
-        # Generate plots dynamically
-        for dim, query in queries.items():
-            data = database.execute_select_sql_query(query)
-
-            values = [entry[0] for entry in data]
-            names = [entry[1] for entry in data]
-
-            # Assigning different colors to each bar
-            num_colors = len(values)
-            colors = plt.cm.viridis(np.linspace(0, 1, num_colors))
-
-            # Plot each bar with a different color
-            for j, (value, name) in enumerate(zip(values, names)):
-                axes[i].barh(name, value, color=colors[j])
-
-            # Add labels and title
-            axes[i].set_title(dim)
-            axes[i].set_xlabel(self.fact_columns[0][1])
-            axes[i].set_ylabel(dim)
-
-            # Rotate x-axis labels for better readability
-            axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45)
-            i += 1
-
-        plt.tight_layout()
-        img = io.BytesIO()
-        plt.savefig(img, format='png')
-        img.seek(0)
-
-        # Encode the image as base64
-        img_base64 = base64.b64encode(img.getvalue()).decode()
-
-        return """
-            <html>
-            <head>
-                <title>Matplotlib Plots</title>
-            </head>
-            <body>
-                <h1>Matplotlib Plots</h1>
-                <div>
-                    <h2>Plot 1</h2>
-                    <img src="data:image/png;base64,{}" alt="Matplotlib Plot 1">
-                </div>
-            </body>
-            </html>
-            """.format(img_base64)
+        with self.session_factory() as session:
+            view_query = f'CREATE VIEW {self.user.username}_cube_{self.fact_columns[0][1]} AS ' + self.olap_cube_query
+            session.execute(text(view_query))
+            session.commit()
 
     @staticmethod
     def _infer_column_type(data) -> type:
@@ -408,15 +287,3 @@ class ExcelConverter(ExcelConverterABC):
         # Check if all values are floats
         else:
             return String
-
-    @staticmethod
-    def _translit(text: str) -> str:
-        """
-        Transliterate Russian text into Latin characters.
-
-        :param text: Russian text to transliterate.
-        :return: Transliterated text.
-        """
-        translit_text = translit(text, 'ru', reversed=True)
-
-        return translit_text.replace("'", '').replace(' ', '_')

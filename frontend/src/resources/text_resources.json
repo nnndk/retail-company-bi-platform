@@ -1,0 +1,106 @@
+{
+    "login": {
+        "EN": "Log In",
+        "RU": "Войти"
+    },
+    "signup": {
+        "EN": "Sign Up",
+        "RU": "Зарегистрироваться"
+    },
+    "logout": {
+        "EN": "Logout",
+        "RU": "Выйти"
+    },
+    "username": {
+        "EN": "Username",
+        "RU": "Имя пользователя"
+    },
+    "password": {
+        "EN": "Password",
+        "RU": "Пароль"
+    },
+    "loginTitle": {
+        "EN": "Log In",
+        "RU": "Вход"
+    },
+    "signupTitle": {
+        "EN": "Sign Up",
+        "RU": "Регистрация"
+    },
+    "dontHaveAccount": {
+        "EN": "Don't have an account?",
+        "RU": "Еще нет аккаунта?"
+    },
+    "alreadyHaveAccount": {
+        "EN": "Already have an account?",
+        "RU": "Уже есть аккаунт?"
+    },
+    "mainPage": {
+        "EN": "Home",
+        "RU": "Главная"
+    },
+    "uploadFile": {
+        "EN": "Upload Excel file with your data",
+        "RU": "Загрузите файл Excel с вашими данными"
+    },
+    "factColumnNames": {
+        "EN": "Write fact column names",
+        "RU": "Введите имена столбцов фактов"
+    },
+    "enterColumnNames": {
+        "EN": "Enter fact column names separated by commas",
+        "RU": "Введите имена столбцов фактов, разделенные запятыми"
+    },
+    "uploadData": {
+        "EN": "Upload data",
+        "RU": "Загрузить данные"
+    },
+    "analyzeData": {
+        "EN": "Analyze your data",
+        "RU": "Проанализируйте свои данные"
+    },
+    "periodGroup": {
+        "EN": "Period Group",
+        "RU": "Период"
+    },
+    "day": {
+        "EN": "Day",
+        "RU": "День"
+    },
+    "month": {
+        "EN": "Month",
+        "RU": "Месяц"
+    },
+    "year": {
+        "EN": "Year",
+        "RU": "Год"
+    },
+    "getCube": {
+        "EN": "Get Cube",
+        "RU": "Получить куб"
+    },
+    "delete": {
+        "EN": "Delete",
+        "RU": "Удалить"
+    },
+    "addLineChart": {
+        "EN": "Add Line Chart",
+        "RU": "Добавить линейный график"
+    },
+    "addPieChart": {
+        "EN": "Add Pie Chart",
+        "RU": "Добавить круговую диаграмму"
+    },
+    "downloadPDF": {
+        "EN": "Download PDF",
+        "RU": "Скачать PDF"
+    },
+    "all": {
+        "EN": "All",
+        "RU": "Все"
+    },
+    "allPeriod": {
+        "EN": "All Period",
+        "RU": "Весь период"
+    }
+}

@@ -2,20 +2,38 @@ import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { authActions } from 'store';
+import { text_resources } from '../resources'
 
-export const Nav = () => {
+export const Nav = ({ language, setLanguage }) => {
     const authUser = useSelector(x => x.auth.user);
     const dispatch = useDispatch();
     const logout = () => dispatch(authActions.logout());
 
-    // only show nav when logged in
-    if (!authUser) return null;
+    const changeLanguage = (e) => {
+        e.preventDefault();
+        let lang = e.target.value;
+        setLanguage(lang)
+    }
     
     return (
         <nav className="navbar navbar-expand navbar-dark bg-dark">
             <div className="navbar-nav w-100 justify-content-between">
-                <NavLink to="/" className="nav-item nav-link">Home</NavLink>
-                <button onClick={logout} className="btn btn-link nav-item nav-link">Logout</button>
+                <NavLink to="/" className="nav-item nav-link">{text_resources["mainPage"][language]}</NavLink>
+                <div className="ml-auto d-flex align-items-center">
+                    <select
+                        value={language}
+                        onChange={changeLanguage}
+                        className="form-select mr-2 custom-select-dark"
+                    >
+                        <option value="EN">EN</option>
+                        <option value="RU">RU</option>
+                    </select>
+                    {authUser && (
+                        <button onClick={logout} className="btn btn-link nav-item nav-link">
+                            {text_resources["logout"][language]}
+                        </button>
+                    )}
+                </div>
             </div>
         </nav>
     );
