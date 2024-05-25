@@ -1,0 +1,4 @@
+/.idea
+*.ini
+src/temp_storage
+__pycache__
