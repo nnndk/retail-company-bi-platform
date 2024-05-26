@@ -13,6 +13,8 @@ def build_app() -> FastAPI:
     origins = [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+        'http://localhost:3001',
         'http://31.129.63.6:3000'
     ]
 

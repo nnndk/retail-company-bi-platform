@@ -25,10 +25,8 @@ export const Nav = ({ language, setLanguage }) => {
                         onChange={changeLanguage}
                         className="form-select mr-2 custom-select-dark"
                     >
-                        {/*<option value="EN">EN</option>
-                        <option value="RU">RU</option>*/}
                         {languages.map((lang) => (
-                            <option value={lang}>{lang}</option>
+                            <option key={lang} value={lang}>{lang}</option>
                         ))}
                     </select>
                     {authUser && (
