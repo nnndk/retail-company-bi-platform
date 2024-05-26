@@ -1,6 +1,20 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:16
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: retail_company_bi_platform_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
   backend:
     build: ./backend
     container_name: backend
@@ -12,7 +26,7 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://postgres:125736546@db:5432/retail_company_bi_platform_db
+      DATABASE_URL: postgresql://postgres:123456@db:5432/retail_company_bi_platform_db
     networks:
       - app-network
 
@@ -21,20 +35,6 @@ services:
     container_name: frontend
     ports:
       - "3000:3000"
-    networks:
-      - app-network
-
-  db:
-    image: postgres:16
-    container_name: db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 125736546
-      POSTGRES_DB: retail_company_bi_platform_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
 

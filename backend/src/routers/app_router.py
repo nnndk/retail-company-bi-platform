@@ -104,3 +104,11 @@ async def get_cube_data(token: Annotated[str, Depends(routers.oauth2_scheme)], p
     cube_manager = OlapCubeManager(user, database.session)
 
     return cube_manager.get_cube(period_group)
+
+
+@AppRouter.get('/ping/', status_code=status.HTTP_200_OK)
+async def ping() -> str:
+    """
+    Check if the server is available
+    """
+    return 'Server works'

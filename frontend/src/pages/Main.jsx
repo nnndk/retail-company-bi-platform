@@ -56,8 +56,10 @@ export const Main = ({ language }) => {
                             <h5 className="mb-5">{text_resources["analyzeData"][language]}</h5>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="fileInput" className="form-label">{text_resources["uploadFile"][language]}:</label>
-                            <input className="form-control-file" type="file" id="fileInput" onChange={handleFileChange} />
+                            <label аor="fileInput" className="form-label">{text_resources["uploadFile"][language]}:</label>
+                            <input className="form-control-file" type="file" id="fileInput" style="visibility:hidden;" onChange={handleFileChange} />
+                            {/*<label for="files" class="btn">Select Image</label>
+                            <input id="files" style="visibility:hidden;" type="file"></input>*/}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="factColumnNames" className="form-label">{text_resources["factColumnNames"][language]}:</label>

@@ -109,7 +109,7 @@ export const DataPieChart = ({ language, cubeInfo, cubeData, periodGroup }) => {
     return (
         <div className='my-4'>
             <div>
-                <label className="mr-2">Select Dimension:</label>
+                <label className="mr-2">{text_resources["selectedDimensionLabel"][language]}:</label>
                 <select onChange={(e) => handleDimSelection(e.target.value)} value={selectedDimension || ""}>
                     {selectedDimension && Object.keys(cubeInfo['dimensions']).map(dimension => (
                         <option key={dimension} value={dimension}>{dimension}</option>
@@ -117,7 +117,7 @@ export const DataPieChart = ({ language, cubeInfo, cubeData, periodGroup }) => {
                 </select>
             </div>
             <div>
-                <label className="mr-2">Select Period:</label>
+                <label className="mr-2">{text_resources["selectedPeriodLabel"][language]}:</label>
                 <select onChange={(e) => handlePeriodSelection(e.target.value)} value={selectedPeriod}>
                     <option key='all' value='all'>{text_resources["allPeriod"][language]}</option>
                     {periodOptions.map(option => (

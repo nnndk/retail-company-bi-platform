@@ -20,7 +20,7 @@ RUN npm run build
 # You can also use serve if you have it in your package.json
 RUN npm install -g serve
 
-# Expose port 5000
+# Expose port 3000
 EXPOSE 3000
 
 # Command to run the application

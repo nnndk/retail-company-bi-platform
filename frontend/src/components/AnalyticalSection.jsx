@@ -26,11 +26,11 @@ export const AnalyticalSection = ({ language }) => {
     };
 
     const handleAddLineChart = () => {
-        setLineChartFilters([...lineChartFilters, { title: 'Line Chart' }]);
+        setLineChartFilters([...lineChartFilters, { title: text_resources["LineChartDefaultTitle"][language] }]);
     };
 
     const handleAddPieChart = () => {
-        setPieChartFilters([...pieChartFilters, { title: 'Pie Chart' }]);
+        setPieChartFilters([...pieChartFilters, { title: text_resources["PieChartDefaultTitle"][language] }]);
     };
 
     const handleRemoveLineChart = (index) => {

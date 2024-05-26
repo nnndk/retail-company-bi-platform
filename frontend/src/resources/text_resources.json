@@ -40,8 +40,8 @@
         "RU": "Главная"
     },
     "uploadFile": {
-        "EN": "Upload Excel file with your data",
-        "RU": "Загрузите файл Excel с вашими данными"
+        "EN": "Choose Excel file with your data",
+        "RU": "Выберите Excel файл с вашими данными"
     },
     "factColumnNames": {
         "EN": "Write fact column names",
@@ -60,8 +60,8 @@
         "RU": "Проанализируйте свои данные"
     },
     "periodGroup": {
-        "EN": "Period Group",
-        "RU": "Период"
+        "EN": "Group by",
+        "RU": "Группировка"
     },
     "day": {
         "EN": "Day",
@@ -118,5 +118,21 @@
     "sendingDataFailed": {
         "EN": "Error sending data!",
         "RU": "Ошибка при отправке данных!"
+    },
+    "LineChartDefaultTitle": {
+        "EN": "Line Chart",
+        "RU": "Линейный график"
+    },
+    "PieChartDefaultTitle": {
+        "EN": "Pie Chart",
+        "RU": "Круговая диаграмма"
+    },
+    "selectedDimensionLabel": {
+        "EN": "Select Dimension",
+        "RU": "Выбранное измерение"
+    },
+    "selectedPeriodLabel": {
+        "EN": "Select Period",
+        "RU": "Выбранный период"
     }
 }

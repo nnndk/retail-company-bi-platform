@@ -10,7 +10,11 @@ def build_app() -> FastAPI:
     """
     app = FastAPI()
     setup_routes(app)
-    origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
+    origins = [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://31.129.63.6:3000'
+    ]
 
     app.add_middleware(
         CORSMiddleware,

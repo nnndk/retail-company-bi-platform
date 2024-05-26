@@ -37,7 +37,14 @@ export const Auth = ({ language }) => {
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
-    function onSubmit({ username, password }) {
+    const onSubmit = async ({ username, password }) => {
+        const pingResponse = await fetch(`${process.env.REACT_APP_API_URL}/ping/`, {
+            method: 'GET'
+        });
+        console.log(pingResponse)
+        let pingData = await pingResponse.json();
+        console.log(pingData)
+
         return dispatch(authActions.login({ isLogin, username, password }));
     }
 
