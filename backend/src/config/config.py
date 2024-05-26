@@ -5,7 +5,7 @@ class Config:
     """
     This class helps to interact with a config file
     """
-    __CONFIG_FILE_NAME = 'config/config.ini'
+    __CONFIG_FILE_NAME = 'src/config/config.ini'
 
     @staticmethod
     def get_config_item(section_name: str, item_name: str) -> any:

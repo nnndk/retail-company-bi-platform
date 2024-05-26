@@ -112,4 +112,3 @@ class Database:
 
 # create db interface instance and init database
 database = Database(settings.database_url)
-database.create_database()
